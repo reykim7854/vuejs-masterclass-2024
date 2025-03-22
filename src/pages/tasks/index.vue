@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { supabase } from '@/lib/supabaseClient'
 import type { Tables } from '../../../database/types.ts'
-import type { ColumnDef } from '@tanstack/vue-table';
-import { RouterLink } from 'vue-router';
-import { usePageStore } from '@/stores/page.js';
+import type { ColumnDef } from '@tanstack/vue-table'
+import { RouterLink } from 'vue-router'
 
 usePageStore().pageData.title = 'My Tasks'
 
 const tasks = ref<Tables<'tasks'>[] | null>(null)
 const getTasks = async () => {
-  const { data, error } = await supabase.from('tasks').select()
+  const { data, error } = await supabase.from('tasks').select(`
+    *,
+    projects (
+      id,
+      name,
+      slug
+    )
+  `)
 
   if (error) console.error(error)
 
@@ -37,22 +43,37 @@ const columns: ColumnDef<Tables<'tasks'>>[] = [
     accessorKey: 'status',
     header: () => h('div', { class: 'text-left' }, 'Status'),
     cell: ({ row }) => {
-      return h('div', { class: 'text-left font-medium' }, row.getValue('status'))
-    }
+      return h(
+        'div',
+        { class: 'text-left font-medium' },
+        row.getValue('status'),
+      )
+    },
   },
   {
     accessorKey: 'due_date',
     header: () => h('div', { class: 'text-left' }, 'Due Date'),
     cell: ({ row }) => {
-      return h('div', { class: 'text-left font-medium' }, row.getValue('due_date'))
-    }
+      return h(
+        'div',
+        { class: 'text-left font-medium' },
+        row.getValue('due_date'),
+      )
+    },
   },
   {
-    accessorKey: 'project_id',
+    accessorKey: 'projects',
     header: () => h('div', { class: 'text-left' }, 'Project'),
     cell: ({ row }) => {
-      return h('div', { class: 'text-left font-medium' }, row.getValue('project_id'))
-    }
+      return h(
+        RouterLink,
+        {
+          to: `/projects/${row.original.projects.slug}`,
+          class: 'text-left font-medium hover:bg-muted block w-full',
+        },
+        () => row.getValue('projects').name,
+      )
+    },
   },
   {
     accessorKey: 'collaborators',
@@ -61,10 +82,10 @@ const columns: ColumnDef<Tables<'tasks'>>[] = [
       return h(
         'div',
         { class: 'text-left font-medium' },
-        JSON.stringify(row.getValue('collaborators'))
+        JSON.stringify(row.getValue('collaborators')),
       )
-    }
-  }
+    },
+  },
 ]
 </script>
 
