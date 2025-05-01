@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { userErrorStore } from './stores/error';
+import { useErrorStore } from './stores/error';
 
-const { activeError } = storeToRefs(userErrorStore())
+const { activeError } = storeToRefs(useErrorStore())
 </script>
 
 <template>
