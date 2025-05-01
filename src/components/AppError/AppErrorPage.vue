@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { userErrorStore } from '@/stores/error';
+
+const router = useRouter()
+
+router.afterEach(() => {
+  userErrorStore().activeError = false
+})
+</script>
+
 <template>
 	<section class="error">
 	    <div>
