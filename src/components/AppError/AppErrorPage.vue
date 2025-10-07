@@ -1,7 +1,10 @@
 <script setup lang="ts">
 const router = useRouter()
+
 const errorStore = useErrorStore()
+
 const error = ref(errorStore.activeError)
+
 const message = ref('')
 const customCode = ref(0)
 const details = ref('')
@@ -11,7 +14,7 @@ const statusCode = ref(0)
 
 if (error.value && !('code' in error.value)) {
   message.value = error.value.message
-  customCode.value = error.value?.customCode ?? 0
+  customCode.value = error.value.customCode ?? 0
 }
 
 if (error.value && 'code' in error.value) {
@@ -19,7 +22,7 @@ if (error.value && 'code' in error.value) {
   details.value = error.value.details
   hint.value = error.value.hint
   code.value = error.value.code
-  statusCode.value = error.value?.statusCode ?? 0
+  statusCode.value = error.value.statusCode ?? 0
 }
 
 const ErrorTemplate = import.meta.env.DEV
@@ -36,10 +39,10 @@ router.afterEach(() => {
     <ErrorTemplate
       :message
       :customCode
-      :details
       :code
-      :hint
       :statusCode
+      :hint
+      :details
       :isCustomError="errorStore.isCustomError"
     />
   </section>

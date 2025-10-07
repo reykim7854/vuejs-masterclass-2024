@@ -3,6 +3,7 @@ export const validateEmail = (email: string) => {
   if (!trimmedEmail) return []
 
   const errors = []
+
   const emailRegex = /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
   const isValidEmailFormat = emailRegex.test(trimmedEmail)
 
@@ -17,7 +18,7 @@ export const validatePassword = (password: string) => {
   const errors = []
 
   if (password.length <= 6)
-    errors.push('Password must be more that 6 characters')
+    errors.push('Password must be more than 6 characters')
 
   return errors
 }

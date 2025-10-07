@@ -7,9 +7,8 @@ const formData = ref({
   lastName: '',
   email: '',
   password: '',
-  confirmPassword: '',
+  confirmPassword: ''
 })
-
 const router = useRouter()
 
 const signup = async () => {
